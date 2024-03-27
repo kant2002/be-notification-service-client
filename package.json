@@ -1,5 +1,5 @@
 {
-  "name": "@kant2002-diia-inhouse/notification-service-client",
+  "name": "@diia-inhouse/notification-service-client",
   "version": "1.0.0-121722",
   "description": "",
   "main": "dist/index.js",
@@ -23,7 +23,7 @@
     "typescript": "^5.3.3"
   },
   "devDependencies": {
-    "@kant2002-diia-inhouse/configs": "^1.27.1",
-    "@kant2002-diia-inhouse/types": "^5.0.0"
+    "@diia-inhouse/configs": "^1.27.1",
+    "@diia-inhouse/types": "^5.0.0"
   }
 }
