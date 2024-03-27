@@ -4,13 +4,14 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
+    "build": "rimraf dist/ && mkdir dist && npm run genproto && tsc",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc"
+    "genproto": "genproto --outputDir src/generated --generateClient"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "types": "dist/index.d.ts",
+  "types": "dist/types/index.d.ts",
   "files": [
     "dist",
     "src"

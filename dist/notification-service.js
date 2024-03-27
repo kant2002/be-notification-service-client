@@ -24,10 +24,10 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.NotificationCampaignServiceDefinition = exports.NotificationServiceDefinition = exports.GetNotificationsListRes = exports.GetNotificationsListReq = exports.GetNotificationsRes = exports.GetNotificationsReq = exports.CreateNotificationWithPushesByMobileUidResponse = exports.CreateNotificationWithPushesResponse = exports.CreateNotificationWithPushesByMobileUidRequestTemplateParamsEntry = exports.CreateNotificationWithPushesByMobileUidRequest = exports.CreateNotificationWithPushesRequestTemplateParamsEntry = exports.CreateNotificationWithPushesRequest = exports.MessageAction = exports.CreateNotificationsAndSendPushesRequest = exports.CreateMessageResponse = exports.CreateMessageRequest = exports.JoinUsersToPushNotificationCampaignRequest = exports.NotificationCampaignTargetNotificationCampaignAddress = exports.NotificationCampaignTargetNotificationCampaignAgeRange = exports.NotificationCampaignTarget = exports.NotificationCampaignAppVersionsNotificationCampaignAppVersionRule = exports.NotificationCampaignAppVersions = exports.CampaignsResponse = exports.GetPushNotificationCampaignResponseTopicsEntry = exports.GetPushNotificationCampaignResponse = exports.CreatePushNotificationCampaignRequest = exports.SendPushNotificationCampaignMessageRequest = exports.PageRequest = exports.NotificationCampaignOperationResult = exports.NotificationCampaignId = exports.Notification = exports.NotificationMessage = exports.notificationCampaignTargetGenderToNumber = exports.notificationCampaignTargetGenderToJSON = exports.notificationCampaignTargetGenderFromJSON = exports.NotificationCampaignTargetGender = void 0;
-/* eslint-disable */
-const types_1 = require("@kant2002-diia-inhouse/types");
 const _m0 = __importStar(require("protobufjs/minimal"));
 const empty_1 = require("./google/protobuf/empty");
+const message_1 = require("./message");
+const gender_1 = require("./token/gender");
 var NotificationCampaignTargetGender;
 (function (NotificationCampaignTargetGender) {
     NotificationCampaignTargetGender["male"] = "male";
@@ -175,7 +175,7 @@ exports.Notification = {
         if (message.creationDate !== "") {
             writer.uint32(18).string(message.creationDate);
         }
-        if (message.isRead === true) {
+        if (message.isRead !== false) {
             writer.uint32(24).bool(message.isRead);
         }
         if (message.message !== undefined) {
@@ -238,7 +238,7 @@ exports.Notification = {
         if (message.creationDate !== "") {
             obj.creationDate = message.creationDate;
         }
-        if (message.isRead === true) {
+        if (message.isRead !== false) {
             obj.isRead = message.isRead;
         }
         if (message.message !== undefined) {
@@ -315,7 +315,7 @@ function createBaseNotificationCampaignOperationResult() {
 }
 exports.NotificationCampaignOperationResult = {
     encode(message, writer = _m0.Writer.create()) {
-        if (message.success === true) {
+        if (message.success !== false) {
             writer.uint32(8).bool(message.success);
         }
         return writer;
@@ -346,7 +346,7 @@ exports.NotificationCampaignOperationResult = {
     },
     toJSON(message) {
         const obj = {};
-        if (message.success === true) {
+        if (message.success !== false) {
             obj.success = message.success;
         }
         return obj;
@@ -1144,7 +1144,7 @@ function createBaseNotificationCampaignTarget() {
 exports.NotificationCampaignTarget = {
     encode(message, writer = _m0.Writer.create()) {
         if (message.gender !== undefined) {
-            writer.uint32(8).int32(notificationCampaignTargetGenderToNumber(message.gender));
+            writer.uint32(8).int32((0, gender_1.genderToNumber)(message.gender));
         }
         if (message.childrenAmount !== undefined) {
             writer.uint32(16).int32(message.childrenAmount);
@@ -1174,7 +1174,7 @@ exports.NotificationCampaignTarget = {
                     if (tag !== 8) {
                         break;
                     }
-                    message.gender = notificationCampaignTargetGenderFromJSON(reader.int32());
+                    message.gender = (0, gender_1.genderFromJSON)(reader.int32());
                     continue;
                 case 2:
                     if (tag !== 16) {
@@ -1216,7 +1216,7 @@ exports.NotificationCampaignTarget = {
     },
     fromJSON(object) {
         return {
-            gender: isSet(object.gender) ? notificationCampaignTargetGenderFromJSON(object.gender) : undefined,
+            gender: isSet(object.gender) ? (0, gender_1.genderFromJSON)(object.gender) : undefined,
             childrenAmount: isSet(object.childrenAmount) ? globalThis.Number(object.childrenAmount) : undefined,
             age: isSet(object.age) ? exports.NotificationCampaignTargetNotificationCampaignAgeRange.fromJSON(object.age) : undefined,
             address: isSet(object.address)
@@ -1231,7 +1231,7 @@ exports.NotificationCampaignTarget = {
     toJSON(message) {
         const obj = {};
         if (message.gender !== undefined) {
-            obj.gender = notificationCampaignTargetGenderToJSON(message.gender);
+            obj.gender = (0, gender_1.genderToJSON)(message.gender);
         }
         if (message.childrenAmount !== undefined) {
             obj.childrenAmount = Math.round(message.childrenAmount);
@@ -1768,7 +1768,7 @@ exports.MessageAction = {
             writer.uint32(10).string(message.type);
         }
         if (message.subtype !== undefined) {
-            writer.uint32(16).int32((0, types_1.messageActionSubtypeToNumber)(message.subtype));
+            writer.uint32(16).int32((0, message_1.messageActionSubtypeToNumber)(message.subtype));
         }
         if (message.resourceId !== undefined) {
             writer.uint32(26).string(message.resourceId);
@@ -1792,7 +1792,7 @@ exports.MessageAction = {
                     if (tag !== 16) {
                         break;
                     }
-                    message.subtype = (0, types_1.messageActionSubtypeFromJSON)(reader.int32());
+                    message.subtype = (0, message_1.messageActionSubtypeFromJSON)(reader.int32());
                     continue;
                 case 3:
                     if (tag !== 26) {
@@ -1811,7 +1811,7 @@ exports.MessageAction = {
     fromJSON(object) {
         return {
             type: isSet(object.type) ? globalThis.String(object.type) : "",
-            subtype: isSet(object.subtype) ? (0, types_1.messageActionSubtypeFromJSON)(object.subtype) : undefined,
+            subtype: isSet(object.subtype) ? (0, message_1.messageActionSubtypeFromJSON)(object.subtype) : undefined,
             resourceId: isSet(object.resourceId) ? globalThis.String(object.resourceId) : undefined,
         };
     },
@@ -1821,7 +1821,7 @@ exports.MessageAction = {
             obj.type = message.type;
         }
         if (message.subtype !== undefined) {
-            obj.subtype = (0, types_1.messageActionSubtypeToJSON)(message.subtype);
+            obj.subtype = (0, message_1.messageActionSubtypeToJSON)(message.subtype);
         }
         if (message.resourceId !== undefined) {
             obj.resourceId = message.resourceId;

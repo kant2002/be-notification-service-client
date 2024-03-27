@@ -1,0 +1,205 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+import "token/gender.proto";
+import "message.proto";
+
+service NotificationService {
+    rpc CreateMessage (CreateMessageRequest) returns (CreateMessageResponse) {}
+    rpc CreateNotificationsAndSendPushes (CreateNotificationsAndSendPushesRequest) returns (google.protobuf.Empty) {}
+    rpc CreateNotificationWithPushes (CreateNotificationWithPushesRequest) returns (CreateNotificationWithPushesResponse) {}
+    rpc CreateNotificationWithPushesByMobileUid (CreateNotificationWithPushesByMobileUidRequest) returns (CreateNotificationWithPushesByMobileUidResponse) {}
+    rpc GetNotificationsList (GetNotificationsListReq) returns (GetNotificationsListRes) {}
+    rpc GetNotifications (GetNotificationsReq) returns (GetNotificationsRes) {}
+}
+
+service NotificationCampaignService {
+    rpc GetPushNotificationCampaign (NotificationCampaignId) returns (GetPushNotificationCampaignResponse) {}
+    rpc GetPushNotificationCampaigns (PageRequest) returns (CampaignsResponse) {}
+    rpc CreatePushNotificationCampaign (CreatePushNotificationCampaignRequest) returns (NotificationCampaignId) {}
+    rpc DeletePushNotificationCampaign (NotificationCampaignId) returns (NotificationCampaignOperationResult) {}
+    rpc ResumePushNotificationCampaign (NotificationCampaignId) returns (google.protobuf.Empty) {}
+    rpc StopPushNotificationCampaign (NotificationCampaignId) returns (google.protobuf.Empty) {}
+    rpc JoinUsersToPushNotificationCampaign (JoinUsersToPushNotificationCampaignRequest) returns (google.protobuf.Empty) {}
+    rpc SendPushNotificationCampaignMessage (SendPushNotificationCampaignMessageRequest) returns (google.protobuf.Empty) {}
+}
+
+enum NotificationCampaignTargetGender {
+    male = 0;
+    female = 1;
+}
+
+message NotificationMessage {
+    string icon = 1;
+    string title = 2;
+    string shortText = 3;
+    optional MessageAction action = 4;
+}
+
+message Notification {
+    string notificationId = 1;
+    string creationDate = 2;
+    bool isRead = 3;
+    NotificationMessage message = 4;
+}
+
+message NotificationCampaignId {
+    string campaignId = 1;
+}
+
+message NotificationCampaignOperationResult {
+    bool success = 1;
+}
+
+message PageRequest {
+    int32 skip = 1;
+    int32 limit = 2;
+}
+
+message SendPushNotificationCampaignMessageRequest {
+    string campaignId = 1;
+    string messageId = 2;
+}
+
+message CreatePushNotificationCampaignRequest {
+    string name = 1;
+    string channel = 2;
+    optional int32 topicsBatch = 3;
+    optional int32 sendInterval = 4;
+    optional NotificationCampaignAppVersions appVersions = 5;
+    optional NotificationCampaignTarget target = 6;
+    optional bool subscribeOnCreate = 7;
+
+}
+
+message GetPushNotificationCampaignResponse {
+    string name = 1;
+    string channel = 2;
+    optional int32 topicsBatch = 3;
+    optional int32 sendInterval = 4;
+    optional NotificationCampaignAppVersions appVersions = 5;
+    optional NotificationCampaignTarget target = 6;
+    string campaignId = 7;
+    map<string, int32> topics = 8;
+
+}
+
+message CampaignsResponse {
+    repeated GetPushNotificationCampaignResponse campaigns = 1;
+    int32 total = 2;
+}
+
+message NotificationCampaignAppVersions{
+    optional NotificationCampaignAppVersionsNotificationCampaignAppVersionRule Android = 1;
+    optional NotificationCampaignAppVersionsNotificationCampaignAppVersionRule Huawei = 2;
+    optional NotificationCampaignAppVersionsNotificationCampaignAppVersionRule iOS = 3;
+}
+
+message NotificationCampaignAppVersionsNotificationCampaignAppVersionRule {
+    optional string minVersion = 1;
+    optional string maxVersion = 2;
+    repeated string versions = 3;
+}
+
+message NotificationCampaignTarget {
+    optional ua.gov.diia.types.token.Gender gender = 1;
+    optional int32 childrenAmount = 2;
+    optional NotificationCampaignTargetNotificationCampaignAgeRange age = 3;
+    optional NotificationCampaignTargetNotificationCampaignAddress address = 4;
+    repeated string documents = 5;
+    optional string organizationId = 6;
+}
+
+message NotificationCampaignTargetNotificationCampaignAgeRange {
+    optional int32 from = 1;
+    optional int32 to = 2;
+}
+
+message NotificationCampaignTargetNotificationCampaignAddress {
+    string regionId = 1;
+    optional string atuId = 2;
+}
+
+message JoinUsersToPushNotificationCampaignRequest {
+    string campaignId = 1;
+    repeated string userIdentifiers = 2;
+}
+
+message CreateMessageRequest {
+    optional string templateId = 1;
+    optional string templateCode = 2;
+    string title = 3;
+    optional string header = 4;
+    string shortText = 5;
+    string fullText = 6;
+    string icon = 7;
+    string resourceId = 8;
+}
+
+message CreateMessageResponse {
+    string messageId = 1;
+}
+
+message CreateNotificationsAndSendPushesRequest {
+    repeated string userIdentifiers = 1;
+    repeated string itns = 2;
+    string messageId = 3;
+}
+
+message MessageAction {
+    string type = 1;
+    optional ua.gov.diia.types.messages.MessageActionSubtype subtype = 2;
+    optional string resourceId = 3;
+}
+
+message CreateNotificationWithPushesRequest {
+    optional string userIdentifier = 1;
+    optional string itn = 2;
+    string templateCode = 3;
+    optional string resourceId = 4;
+    repeated string excludedMobileUids = 5;
+    map<string, string> templateParams = 6;
+    optional NotificationCampaignAppVersions appVersions = 7;
+    optional MessageAction action = 8;
+}
+
+message CreateNotificationWithPushesByMobileUidRequest {
+    string templateCode = 1;
+    string userIdentifier = 2;
+    string mobileUid = 3;
+    optional string resourceId = 4;
+    map<string, string> templateParams = 5;
+}
+
+message CreateNotificationWithPushesResponse {
+    optional string notificationId = 1;
+}
+
+message CreateNotificationWithPushesByMobileUidResponse {
+    optional string notificationId = 1;
+}
+
+message GetNotificationsReq { 
+    optional int32 skip = 1;
+    optional int32 limit = 2;
+    optional bool isRead = 3;
+
+}
+
+message GetNotificationsRes {
+    int32 total = 1;
+    int32 unread = 2;
+    repeated Notification notifications = 3;
+}
+
+message GetNotificationsListReq {
+    string userIdentifier = 1;
+    optional string mobileUid = 2;
+    optional int32 skip = 3;
+    optional int32 limit = 4;
+    optional bool isRead = 5;
+}
+
+message GetNotificationsListRes {
+    repeated Notification notifications = 1;
+}
